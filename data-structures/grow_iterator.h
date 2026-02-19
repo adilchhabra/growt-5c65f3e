@@ -51,7 +51,7 @@ public:
             [](HashPtrRef_t t, MappedRefGrowT& sref) -> int
             {
                 sref.base_refresh_ptr(t);
-                sref.ref.refresh();
+                sref._mref.refresh();
                 return 0;
             }, *this);
     }
@@ -63,7 +63,7 @@ public:
             [](HashPtrRef_t t, MappedRefGrowT& sref, const mapped_type& value) -> int
             {
                 sref.base_refresh_ptr(t);
-                sref.ref.operator=(value);
+                sref._mref.operator=(value);
                 return 0;
             }, *this, value);
     }
@@ -74,7 +74,7 @@ public:
             [](HashPtrRef_t t, MappedRefGrowT& sref, const mapped_type& value, F f) -> int
             {
                 sref.base_refresh_ptr(t);
-                sref.ref.update(value, f);
+                sref._mref.update(value, f);
                 return 0;
             }, *this, value, f);
     }
@@ -85,7 +85,7 @@ public:
                mapped_type& exp, const mapped_type& val)
             {
                 sref.base_refresh_ptr(t);
-                return sref.ref.compare_exchange(exp, val);
+                return sref._mref.compare_exchange(exp, val);
             }, *this, std::ref(exp), val);
     }
 
@@ -144,8 +144,8 @@ public:
     inline bool compare_exchange(mapped_type& exp, const mapped_type &val)
     { return second.compare_exchange(exp, val); }
 
-    inline operator pair_type()  const { return pair_type (second.ref); }
-    inline operator value_type() const { return value_type(second.ref); }
+    inline operator pair_type()  const { return pair_type (second._mref); }
+    inline operator value_type() const { return value_type(second._mref); }
 
 private:
     // Table_t&  tab;
