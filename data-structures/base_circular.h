@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <functional>
 #include <atomic>
+#include <memory>
 #include <stdexcept>
 
 #include "utils/default_hash.hpp"
@@ -31,7 +32,8 @@ class BaseCircular
 {
 private:
     using This_t          = BaseCircular<E,HashFct,A>;
-    using Allocator_t     = typename A::template rebind<E>::other;
+    using Allocator_t     =
+        typename std::allocator_traits<A>::template rebind_alloc<E>;
 
     template <class> friend class GrowTableHandle;
 

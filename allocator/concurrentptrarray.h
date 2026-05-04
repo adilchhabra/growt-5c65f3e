@@ -17,6 +17,7 @@
 #include <atomic>
 #include <algorithm>
 #include <limits>
+#include <memory>
 
 template <typename T, class Alloc = std::allocator<T*> >
 class ConcurrentPtrArray
@@ -25,7 +26,8 @@ private:
     using Element_t   = T;
     using ElementPtr  = T*;
     using ElementAPtr = std::atomic<T*>;
-    using Allocator_t = typename Alloc::template rebind<ElementAPtr>::other;
+    using Allocator_t =
+        typename std::allocator_traits<Alloc>::template rebind_alloc<ElementAPtr>;
 
     std::atomic_int    reader;
 public:
